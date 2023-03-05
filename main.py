@@ -1,6 +1,8 @@
 import json
 import random
+import sys
 
+from misskey import Misskey
 import tweepy
 
 
@@ -56,15 +58,55 @@ def twit_auth_ret_api(credential_path: str):
 
 
 """
-botメイン関数
-
+Twitter 向けメイン処理
 """
-def main():
+def twit_main():
     api = twit_auth_ret_api('credential.json')
     content = generate_kotoba()
     api.create_tweet(text=content)
     print('tweeted "%s"' % content)
 
+
+"""
+misskey トークンを返す
+
+@param credential_path 認証情報のパス
+@return トークン
+
+"""
+def msky_token(credential_path: str):
+    with open(credential_path, 'r') as f:
+        credential = json.load(f)
+    
+    return credential["misskey token"]
+
+
+"""
+misskey 向けメイン処理
+"""
+def msky_main():
+    token = msky_token('credential.json')
+    api = Misskey('misskey.io', i=token)
+    content = generate_kotoba()
+    api.notes_create(text=content)
+    print('noted "%s"' % content)
+
+
+"""
+botメイン関数
+
+"""
+def main():
+    # misskey も twitter も、1回の起動で1度だけ投稿
+    if sys.argv[1] == 'misskey':
+        msky_main()
+    elif sys.argv[1] == 'twitter':
+        twit_main()
+    elif sys.argv[1] == 'all':
+        msky_main()
+        twit_main()
+    else:
+        print('invalid argument')
 
 if __name__ == '__main__':
     main()

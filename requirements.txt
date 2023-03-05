@@ -1,6 +1,9 @@
 certifi==2021.5.30
 charset-normalizer==2.0.4
+gevent==22.10.2
+greenlet==2.0.2
 idna==3.2
+Misskey.py==4.1.0
 oauthlib==3.2.2
 Pillow==8.4.0
 PySocks==1.7.1
@@ -10,3 +13,6 @@ six==1.16.0
 tweepy==4.12.1
 twitter==1.19.3
 urllib3==1.26.6
+websocket==0.2.1
+zope.event==4.6
+zope.interface==5.5.2
