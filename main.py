@@ -14,6 +14,19 @@ def generate_kotoba(base_word) -> str:
 
 
 """
+一致時に確定演出をつける
+"""
+def effect(word):
+    if word == "よさのあきこ":
+        result = word + "\n\n:yosano_party::yosano_akiko::yosano_party:"
+    elif word == "レターパック":
+        result = word + "\n\n:send_money:"
+    else:
+        result = word
+    return result
+
+
+"""
 misskey トークンを返す
 
 @param credential_path 認証情報のパス
@@ -34,6 +47,7 @@ def msky_main(base_word):
     token = msky_token('credential.json')
     api = Misskey('misskey.io', i=token)
     content = generate_kotoba(base_word)
+    content = effect(content)
     api.notes_create(text=content)
     print('noted "%s"' % content)
 
