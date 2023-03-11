@@ -18,9 +18,9 @@ def generate_kotoba(base_word) -> str:
 """
 def effect(word):
     if word == "よさのあきこ":
-        result = word + "\n$[tada :yosano_party: ]$[tada :yosano_akiko: ]$[tada :yosano_party:]"
+        result = word + "\n$[x3 $[tada :yosano_party: ]$[tada :yosano_akiko: ]$[tada :yosano_party:]]"
     elif word == "レターパック":
-        result = word + "\n$[tada :send_money:]"
+        result = word + "\n$[x2 $[tada :send_money:]]"
     else:
         result = word
     return result
