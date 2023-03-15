@@ -5,6 +5,25 @@ import sys
 from misskey import Misskey
 
 
+emoji_list = {
+    "よ": ":_yo:",
+    "さ": ":_sa:",
+    "の": ":_no:",
+    "あ": ":_a:",
+    "き": ":_ki:",
+    "こ": ":_ko:",
+    "レ": ":_re:",
+    "タ": ":_ta:",
+    "ー": ":_prolong:",
+    "パ": ":_pa:",
+    "ッ": ":_ltsu:",
+    "ク": ":_ku:",
+    "で": ":_de:",
+    "現金": "::",
+    "送れ": "::",
+}
+
+
 """
 コンテンツ（ことば）を生成する
 """
@@ -48,8 +67,18 @@ def msky_main(base_word):
     api = Misskey('misskey.io', i=token)
     content = generate_kotoba(base_word)
     content = effect(content)
+    content = msky_emoji_replace(content)
     api.notes_create(text=content)
     print('noted "%s"' % content)
+
+
+"""
+Misskey カスタム絵文字に置き換える
+"""
+def msky_emoji_replace(content):
+    for emoji in emoji_list:
+        content = content.replace(emoji, emoji_list[emoji])
+    return content
 
 
 """
