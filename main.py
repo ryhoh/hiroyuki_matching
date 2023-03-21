@@ -5,48 +5,31 @@ import sys
 from misskey import Misskey
 
 
-emoji_list = {
-    "よ": ":_yo:",
-    "さ": ":_sa:",
-    "の": ":_no:",
-    "あ": ":_a:",
-    "き": ":_ki:",
-    "こ": ":_ko:",
-    "レ": ":_re:",
-    "タ": ":_ta:",
-    "ー": ":_prolong:",
-    "パ": ":_pa:",
-    "ッ": ":_ltsu:",
-    "ク": ":_ku:",
-    "で": ":_de:",
-    "現金": "::",
-    "送れ": "::",
-}
+sentence_list = set([
+    'なんだろう、', 'うそつくの', 'やめてもらっていいですか？',
+    '不快感を', '覚えた自分に', '驚いたんだよね',
+    'それって', 'あなたの', '感想ですよね？',
+    'なんか', 'そういうデータ', 'あるんですか？',
+    'うそはうそであると', '見抜ける人でないと', '（掲示板を使うのは）難しい',
+    'はいか、', 'いいえで', '答えてください',
+])
+
+answer_list = set([
+    "".join(sentence_list[i:i+3])
+    for i in range(0, len(sentence_list), 3)
+])
 
 
 """
-コンテンツ（ことば）を生成する
+misskey 向けメイン処理
 """
-def generate_kotoba(base_word) -> str:
-    result = "".join(random.sample(base_word, k=len(base_word)))
-    return result
-
-
-"""
-一致時に確定演出をつける
-"""
-def effect(word):
-    if word == "よさのあきこ":
-        result = "$[spin.left,speed=2s $[position.x=2 $[spin.speed=1s \
-$[position.x=2 $[spin.left,speed=2s $[rainbow 　　　　　%s]]]]]]\
-\n\n$[x2 $[rainbow $[tada :yosano_party:]$[tada :yosano_akiko:]$[tada :yosano_party:]]]" % word
-    elif word == "レターパック":
-        result = "$[spin.left,speed=2s $[position.x=2 $[spin.speed=1s \
-$[position.x=2 $[spin.left,speed=2s $[rainbow 　　　　　%s]]]]]]\
-\n\n$[rainbow $[tada :send_money:]]" % word
-    else:
-        result = word
-    return result
+def msky_main(base_word):
+    token = msky_token('credential.json')
+    api = Misskey('misskey.io', i=token)
+    content = generate_kotoba(base_word)
+    content = effect(content)
+    api.notes_create(text=content)
+    print('noted "%s"' % content)
 
 
 """
@@ -64,25 +47,24 @@ def msky_token(credential_path: str):
 
 
 """
-misskey 向けメイン処理
+コンテンツ（ことば）を生成する
 """
-def msky_main(base_word):
-    token = msky_token('credential.json')
-    api = Misskey('misskey.io', i=token)
-    content = generate_kotoba(base_word)
-    content = effect(content)
-    content = msky_emoji_replace(content)
-    api.notes_create(text=content)
-    print('noted "%s"' % content)
+def generate_kotoba() -> str:
+    result = "".join(random.sample(sentence_list, k=3))
+    return result
 
 
 """
-Misskey カスタム絵文字に置き換える
+フキダシをつける
+一致時に確定演出をつける
 """
-def msky_emoji_replace(content):
-    for emoji in emoji_list:
-        content = content.replace(emoji, emoji_list[emoji])
-    return content
+def effect(word):
+    if word in answer_list:
+        result = "$[rainbow $[tada %s]]" % word
+    else:
+        result = word
+    result = ":left_side_balloon_with_tail:" + result
+    return result
 
 
 """
