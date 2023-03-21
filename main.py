@@ -5,14 +5,14 @@ import sys
 from misskey import Misskey
 
 
-sentence_list = set([
+sentence_list = [
     'なんだろう、', 'うそつくの', 'やめてもらっていいですか？',
     '不快感を', '覚えた自分に', '驚いたんだよね',
     'それって', 'あなたの', '感想ですよね？',
     'なんか', 'そういうデータ', 'あるんですか？',
     'うそはうそであると', '見抜ける人でないと', '（掲示板を使うのは）難しい',
     'はいか、', 'いいえで', '答えてください',
-])
+]
 
 answer_list = set([
     "".join(sentence_list[i:i+3])
@@ -23,10 +23,10 @@ answer_list = set([
 """
 misskey 向けメイン処理
 """
-def msky_main(base_word):
+def msky_main():
     token = msky_token('credential.json')
     api = Misskey('misskey.io', i=token)
-    content = generate_kotoba(base_word)
+    content = generate_kotoba()
     content = effect(content)
     api.notes_create(text=content)
     print('noted "%s"' % content)
@@ -71,9 +71,9 @@ def effect(word):
 botメイン関数
 
 """
-def main(base_word):
-    msky_main(base_word)
+def main():
+    msky_main()
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main()
