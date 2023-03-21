@@ -37,9 +37,13 @@ def generate_kotoba(base_word) -> str:
 """
 def effect(word):
     if word == "よさのあきこ":
-        result = "$[rainbow %s]\n$[x2 $[tada :yosano_party:]$[tada :yosano_akiko:]$[tada :yosano_party:]]" % word
+        result = "$[spin.left,speed=2s $[position.x=2 $[spin.speed=1s \
+$[position.x=2 $[spin.left,speed=2s $[rainbow 　　　　　%s]]]]]]\
+\n\n$[x2 $[rainbow $[tada :yosano_party:]$[tada :yosano_akiko:]$[tada :yosano_party:]]]" % word
     elif word == "レターパック":
-        result = "$[rainbow %s]\n$[x2 $[tada :send_money:]]" % word
+        result = "$[spin.left,speed=2s $[position.x=2 $[spin.speed=1s \
+$[position.x=2 $[spin.left,speed=2s $[rainbow 　　　　　%s]]]]]]\
+\n\n$[rainbow $[tada :send_money:]]" % word
     else:
         result = word
     return result
